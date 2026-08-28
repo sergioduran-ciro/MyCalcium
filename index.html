@@ -111,6 +111,9 @@ nav button{border:0;background:none;color:var(--muted);font-size:10px}nav span{d
 .supplement-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.supplement-box{padding:11px;border:1px solid var(--border);border-radius:13px;background:#f8fafc}.supplement-box h4{margin:0 0 8px;font-size:14px}.supplement-status{margin-top:10px;padding:10px;border-radius:11px;background:#f1f5f9;color:#64748b;font-size:12px}.supplement-status.taken{background:#dcfce7;color:#26734d}.intake-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}.intake-part{padding:8px;border-radius:10px;background:#f8fafc;text-align:center}.intake-part b{display:block;font-size:13px}.intake-part span{font-size:10px;color:var(--muted)}
 .reference-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.reference-list{border:1px solid var(--border);border-radius:14px;padding:12px;background:#f8fafc}.reference-list h4{margin:0 0 9px;font-size:15px}.reference-list ul{list-style:none;padding:0;margin:0;display:grid;gap:7px}.reference-list li{padding:7px 8px;border-radius:9px;background:#fff;font-size:12px;line-height:1.35}.reference-list li span{display:block;color:var(--muted);font-size:10px;margin-top:2px}.reference-note{margin-top:10px;padding:10px;border-radius:10px;background:#fff8e6;color:#7c5b12;font-size:11px;line-height:1.45}@media(max-width:520px){.reference-grid,.supplement-grid{grid-template-columns:1fr}}
 .metric-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}.metric-tabs button{border:1px solid var(--border);border-radius:10px;padding:9px 4px;background:#fff;color:#64748b;font-weight:700;font-size:11px}.metric-tabs button.active{background:#dcfce7;border-color:#86d3a8;color:#26734d}
+.guide-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.42);z-index:80;align-items:flex-end;justify-content:center}.guide-overlay.open{display:flex}.guide-sheet{width:min(100%,560px);max-height:82vh;overflow:auto;background:#fff;border-radius:22px 22px 0 0;padding:18px 16px 28px;box-shadow:0 -12px 35px rgba(15,23,42,.18)}.guide-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.guide-head h3{margin:0}.guide-close{border:0;background:#f1f5f9;border-radius:50%;width:36px;height:36px;font-size:20px}.guide-accordion{border:1px solid var(--border);border-radius:13px;margin-top:9px;overflow:hidden}.guide-accordion summary{list-style:none;padding:13px;background:#f8fafc;font-weight:800;cursor:pointer;display:flex;justify-content:space-between}.guide-accordion summary::-webkit-details-marker{display:none}.guide-accordion summary:after{content:'＋';font-size:18px}.guide-accordion[open] summary:after{content:'−'}.guide-accordion ul{list-style:none;padding:8px 12px 12px;margin:0;display:grid;gap:6px}.guide-accordion li{padding:7px 8px;background:#f8fafc;border-radius:9px;font-size:12px}.guide-accordion li small{display:block;color:var(--muted);margin-top:2px}.guide-disclaimer{font-size:11px;color:var(--muted);line-height:1.4;margin-top:12px}
+.source-badge{display:inline-block;border:0;border-radius:999px;padding:3px 7px;margin-top:5px;background:#eef6ff;color:#3b6e9f;font-size:9px;cursor:pointer}.data-source-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.data-source-card{padding:10px;border:1px solid var(--border);border-radius:12px;background:#f8fafc}.data-source-card b{display:block;font-size:12px}.data-source-card span{font-size:10px;color:var(--muted)}.report-preview{display:none;margin-top:10px;padding:13px;border:1px solid var(--border);border-radius:13px;background:#f8fafc;white-space:pre-wrap;font-size:12px;line-height:1.5}.report-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}.report-actions button{margin:0;padding:10px 5px;font-size:11px}@media(max-width:520px){.data-source-grid{grid-template-columns:1fr}.report-actions{grid-template-columns:1fr}}
+.chart-unit{font-size:11px;color:var(--muted);font-weight:700;text-align:right;margin:2px 0 5px}.chart-unit b{color:#334155}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#71c79a"><meta name="apple-mobile-web-app-capable" content="yes"></head>
 <body>
@@ -267,7 +270,7 @@ nav button{border:0;background:none;color:var(--muted);font-size:10px}nav span{d
   <div class="period-head">
     <div><h3 style="margin-bottom:2px">Historial y gráficas</h3><span id="chartMetricLabel">Consumo de calcio</span></div>
   </div>
-  <div class="metric-tabs"><button class="active" onclick="setMetric('calcium',this)">🦴 Calcio</button><button onclick="setMetric('calories',this)">🔥 Calorías</button><button onclick="setMetric('vitaminD',this)">☀️ Vitamina D</button></div>
+  <div class="metric-tabs"><button class="active" onclick="setMetric('calcium',this)">🦴 Calcio</button><button onclick="setMetric('calories',this)">🔥 Calorías</button><button onclick="setMetric('vitaminD',this)">☀️ Vitamina D</button></div><div id="chartUnitLabel" class="chart-unit">Unidad de la gráfica: <b>mg</b></div>
   <div class="range-tabs">
     <button class="active" data-range="day" onclick="setRange('day',this)">Diario</button>
     <button data-range="week" onclick="setRange('week',this)">Semanal</button>
@@ -323,6 +326,21 @@ nav button{border:0;background:none;color:var(--muted);font-size:10px}nav span{d
 </section>
 
 <section class="card">
+  <h3>Fuentes nutricionales</h3>
+  <div class="note">El prototipo conserva estimaciones locales para funcionar sin conexión. Desde cada alimento se puede abrir una fuente confiable para contrastar el valor.</div>
+  <div class="data-source-grid"><div class="data-source-card"><b>🇲🇽 BAM · INSP</b><span>Alimentos y platillos consumidos en México.</span></div><div class="data-source-card"><b>🌎 USDA FoodData Central</b><span>Alimentos genéricos, internacionales y productos de marca.</span></div><div class="data-source-card"><b>🇲🇽 INCMNSZ · CONABIO</b><span>Tabla extendida de composición de alimentos mexicanos.</span></div><div class="data-source-card"><b>🔒 Conexión segura</b><span>La sincronización automática requiere un servidor para proteger la clave USDA.</span></div></div>
+</section>
+
+<section class="card" id="medicalReport">
+  <h3>Resumen para compartir con el médico</h3>
+  <div class="form-grid"><label class="field">Periodo<select id="reportPeriod"><option value="7">Últimos 7 días</option><option value="30" selected>Últimos 30 días</option><option value="90">Últimos 90 días</option></select></label><label class="field">Nombre del paciente (opcional)<input id="reportPatientName" placeholder="Puede dejarse vacío"></label></div>
+  <button class="btn btn-secondary" style="width:100%;margin-top:10px" onclick="generateMedicalReport()">Generar resumen</button>
+  <div id="reportPreview" class="report-preview"></div>
+  <div id="reportActions" class="report-actions" style="display:none"><button class="btn btn-secondary" onclick="copyMedicalReport()">Copiar</button><button class="btn btn-secondary" onclick="downloadMedicalReport()">Descargar</button><button class="btn btn-primary" onclick="shareMedicalReport()">Compartir</button></div>
+  <div class="note">Nada se envía automáticamente. El paciente revisa el contenido y decide si desea compartirlo.</div>
+</section>
+
+<section class="card">
   <h3>Configuración</h3>
   <label class="field">Meta diaria de calcio (mg)</label>
   <div class="goal-edit">
@@ -330,6 +348,9 @@ nav button{border:0;background:none;color:var(--muted);font-size:10px}nav span{d
     <button class="btn btn-secondary" onclick="saveGoal()">Ajuste médico</button>
   </div>
   <div class="note">La meta se calcula automáticamente con edad y sexo usando la tabla de ingesta diaria de calcio publicada por IOF (IOM/NAM). El médico puede modificarla cuando exista una indicación clínica individual.</div>
+  <div class="form-grid" style="margin-top:10px"><label class="field">Referencia diaria de calorías (kcal)<input id="calorieGoalInput" type="number" min="500" step="50" value="2000"></label><label class="field">Meta diaria de vitamina D (unidades)<input id="vitaminDGoalInput" type="number" min="0" step="100" value="600"></label></div>
+  <button class="btn btn-secondary" style="width:100%;margin-top:9px" onclick="saveAdditionalGoals()">Guardar metas para gráficas</button>
+  <div class="note">2,000 kcal es únicamente una referencia inicial, no una prescripción individual. Ajusta calorías y vitamina D con tu profesional de salud.</div>
   <div class="quick-title">Accesibilidad y recordatorios</div>
   <div class="access-row">
     <button id="largeTextButton" class="toggle-btn" onclick="toggleLargeText()">A+ Letra grande</button>
@@ -355,7 +376,20 @@ nav button{border:0;background:none;color:var(--muted);font-size:10px}nav span{d
   <button><span>➕</span>Registrar</button>
   <button><span>📊</span>Gráficas</button>
   <button><span>👤</span>Perfil</button>
-</nav>
+<button onclick="toggleFoodGuide(true)"><span>🥗</span>Alimentos</button></nav>
+<div id="foodGuideOverlay" class="guide-overlay" onclick="closeFoodGuideFromBackdrop(event)" role="dialog" aria-modal="true" aria-labelledby="foodGuideTitle">
+  <div class="guide-sheet">
+    <div class="guide-head"><h3 id="foodGuideTitle">Consulta rápida</h3><button class="guide-close" onclick="toggleFoodGuide(false)" aria-label="Cerrar">×</button></div>
+    <div class="note">Solo para consulta. Estos alimentos no se agregan automáticamente a tu registro.</div>
+    <details class="guide-accordion"><summary>🦴 Alimentos ricos en calcio</summary><ul>
+      <li>Yogur natural o bajo en grasa<small>Fuente concentrada de calcio.</small></li><li>Leche o leche deslactosada<small>El calcio es similar entre variedades.</small></li><li>Quesos: panela, Oaxaca, mozzarella o manchego<small>La cantidad depende del tipo y porción.</small></li><li>Sardinas con espinas<small>Las espinas blandas aportan calcio.</small></li><li>Salmón enlatado con espinas<small>Consumir con las espinas blandas.</small></li><li>Tofu preparado con sales de calcio<small>Confirmar el calcio en la etiqueta.</small></li><li>Bebidas vegetales fortificadas<small>Soya o almendra; agitar y revisar la etiqueta.</small></li><li>Jugo de naranja fortificado<small>No todas las marcas contienen calcio añadido.</small></li><li>Col rizada, bok choy y brócoli<small>Fuentes vegetales con cantidades variables.</small></li><li>Chía y ajonjolí<small>La porción habitual suele ser pequeña.</small></li>
+    </ul></details>
+    <details class="guide-accordion"><summary>☀️ Alimentos con vitamina D</summary><ul>
+      <li>Trucha y salmón<small>Entre las mejores fuentes naturales.</small></li><li>Atún y caballa<small>Pescados grasos con vitamina D.</small></li><li>Sardinas<small>Aportan vitamina D y calcio si se comen las espinas.</small></li><li>Leche fortificada<small>Confirmar vitamina D en la etiqueta.</small></li><li>Bebidas vegetales fortificadas<small>Soya, almendra o avena; revisar la marca.</small></li><li>Cereales fortificados<small>El aporte cambia entre productos.</small></li><li>Jugo o yogur fortificados<small>Solo algunas marcas contienen vitamina D.</small></li><li>Hongos expuestos a luz ultravioleta<small>La etiqueta puede indicar vitamina D aumentada.</small></li><li>Yema de huevo y queso<small>Aportan cantidades menores.</small></li><li>Aceite de hígado de pescado<small>Fuente concentrada; usar según indicación profesional.</small></li>
+    </ul></details>
+    <div class="guide-disclaimer">Los productos fortificados varían según la marca y el país. Esta guía no sustituye una recomendación nutricional individual.</div>
+  </div>
+</div>
 <div id="toast" class="toast"></div>
 </div>
 
@@ -378,9 +412,9 @@ function initAuth(){
   else $('loginScreen').style.display='flex';
 }
 
-const KEY='mycalcium_entries_v2', GOALKEY='mycalcium_goal_v2', PROFILEKEY='mycalcium_profile_v1', OVERRIDEKEY='mycalcium_goal_override_v1';
+const KEY='mycalcium_entries_v2', GOALKEY='mycalcium_goal_v2', PROFILEKEY='mycalcium_profile_v1', OVERRIDEKEY='mycalcium_goal_override_v1', CALORIEGOALKEY='mycalcium_calorie_goal_v1', VITAMINGOALKEY='mycalcium_vitamin_d_goal_v1';
 let entries=JSON.parse(localStorage.getItem(KEY)||'[]');
-let goal=Number(localStorage.getItem(GOALKEY)||1200);
+let goal=Number(localStorage.getItem(GOALKEY)||1200), calorieGoal=Number(localStorage.getItem(CALORIEGOALKEY)||2000), vitaminDGoal=Number(localStorage.getItem(VITAMINGOALKEY)||600);
 let profile=JSON.parse(localStorage.getItem(PROFILEKEY)||'{}');
 let manualOverride=localStorage.getItem(OVERRIDEKEY)==='true';
 let mode='describe', range='day', metric='calcium';
@@ -458,6 +492,7 @@ function saveGoal(){
 const FAVKEY='mycalcium_favorite_meals_v1',ACCESSKEY='mycalcium_large_text_v1',REMINDERKEY='mycalcium_reminders_v1',REMINDERTIMESKEY='mycalcium_reminder_times_v1',SUPPLEMENTKEY='mycalcium_supplements_v1';
 let favoriteMeals=JSON.parse(localStorage.getItem(FAVKEY)||'[]');
 let supplements=JSON.parse(localStorage.getItem(SUPPLEMENTKEY)||'{}');
+let medicalReportText='';
 const foodDB=[
  {name:'Leche entera',keys:['vaso de leche','leche entera','leche'],unit:'vaso (240 ml)',ca:276,kcal:149},
  {name:'Leche descremada',keys:['leche descremada','leche light'],unit:'vaso (240 ml)',ca:299,kcal:83},
@@ -611,10 +646,12 @@ function parseFoods(text){
  }
  return selected;
 }
+function sourceForFood(name){const mexican=/taco|tortilla|quesadilla|enchilada|chilaquil|pozole|tamal|tostada|sope|tlacoyo|mollete|pambazo|elote|esquite|nopal|frijol|arroz rojo|calabacita|panela|oaxaca|amaranto|bolillo|horchata/i.test(name);return mexican?{label:'BAM / INSP',url:'https://portal.insp.mx/informacion-relevante/bam-bienvenida'}:{label:'USDA FoodData Central',url:'https://fdc.nal.usda.gov/fdc-app.html#/food-search?query='+encodeURIComponent(name)};}
+function openNutritionSource(index){const item=detectedItems[index];if(!item)return;const source=sourceForFood(item.name);window.open(source.url,'_blank','noopener');}
 function renderDetectedItems(){
  const box=$('detectedFoods');
  if(!detectedItems.length){box.innerHTML='<div class="empty">Aún no hay alimentos en esta comida.</div>';}
- else box.innerHTML=detectedItems.map((item,i)=>'<div class="food-item '+(item.uncertain?'uncertain':'')+'"><div><div class="food-item-name">'+escapeHtml(item.name)+'</div><div class="food-item-meta">'+escapeHtml(item.unit)+' · '+fmt(item.ca*item.qty)+' mg Ca · '+fmt(item.kcal*item.qty)+' kcal</div>'+(item.uncertain?'<div class="uncertain-note">⚠️ Confirma el tipo de alimento con el buscador.</div>':'')+'</div><div class="portion-controls"><button class="portion-chip" onclick="setItemQty('+i+',.5)">½</button><input type="number" min="0.1" max="20" step="0.25" value="'+item.qty+'" aria-label="Cantidad de '+escapeHtml(item.name)+'" oninput="updateItemQty('+i+',this.value)"><button class="portion-chip" onclick="setItemQty('+i+',2)">2</button></div><button class="icon-btn" onclick="removeDetectedItem('+i+')" aria-label="Quitar">×</button></div>').join('');
+ else box.innerHTML=detectedItems.map((item,i)=>'<div class="food-item '+(item.uncertain?'uncertain':'')+'"><div><div class="food-item-name">'+escapeHtml(item.name)+'</div><div class="food-item-meta">'+escapeHtml(item.unit)+' · '+fmt(item.ca*item.qty)+' mg Ca · '+fmt(item.kcal*item.qty)+' kcal</div><button class="source-badge" onclick="openNutritionSource('+i+')">Contrastar en '+sourceForFood(item.name).label+'</button>'+(item.uncertain?'<div class="uncertain-note">⚠️ Confirma el tipo de alimento con el buscador.</div>':'')+'</div><div class="portion-controls"><button class="portion-chip" onclick="setItemQty('+i+',.5)">½</button><input type="number" min="0.1" max="20" step="0.25" value="'+item.qty+'" aria-label="Cantidad de '+escapeHtml(item.name)+'" oninput="updateItemQty('+i+',this.value)"><button class="portion-chip" onclick="setItemQty('+i+',2)">2</button></div><button class="icon-btn" onclick="removeDetectedItem('+i+')" aria-label="Quitar">×</button></div>').join('');
  updateEstimateTotals();
 }
 function updateEstimateTotals(){
@@ -672,7 +709,21 @@ function checkMealReminder(){
  if(localStorage.getItem(REMINDERKEY)!=='true'||!('Notification' in window)||Notification.permission!=='granted')return;const now=new Date(),current=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0'),times=getReminderTimes(),labels={breakfast:'tu desayuno',lunch:'tu comida',dinner:'tu cena'};
  Object.keys(times).forEach(name=>{const key='mycalcium_reminder_'+iso(now)+'_'+name;if(current===times[name]&&!localStorage.getItem(key)){notifyMeal(labels[name]);localStorage.setItem(key,'1');}});
 }
+function saveAdditionalGoals(){const kcal=Number($('calorieGoalInput').value),vitD=Number($('vitaminDGoalInput').value);if(kcal<500||vitD<0){showToast('Introduce metas válidas.');return;}calorieGoal=kcal;vitaminDGoal=vitD;localStorage.setItem(CALORIEGOALKEY,String(calorieGoal));localStorage.setItem(VITAMINGOALKEY,String(vitaminDGoal));renderChart();showToast('Metas de las gráficas guardadas.');}
+function renderAdditionalGoals(){$('calorieGoalInput').value=calorieGoal;$('vitaminDGoalInput').value=vitaminDGoal;}
 function showSaveSuccess(){const total=sum(todayEntries(),'calcium'),pct=goal?Math.round(total/goal*100):0,remaining=Math.max(goal-total,0);$('successMessage').textContent='Hoy llevas '+fmt(total)+' mg de calcio ('+pct+'% de tu meta).';$('successBar').style.width=Math.min(pct,100)+'%';$('successSuggestion').textContent=remaining?'Te faltan aproximadamente '+fmt(remaining)+' mg. Continúa registrando tus alimentos; no es una indicación de suplemento.':'Has alcanzado tu meta diaria de calcio.';$('successPanel').style.display='block';}
+function toggleFoodGuide(open){const overlay=$('foodGuideOverlay');overlay.classList.toggle('open',open);document.body.style.overflow=open?'hidden':'';if(open)overlay.querySelector('summary').focus();}
+function closeFoodGuideFromBackdrop(event){if(event.target===$('foodGuideOverlay'))toggleFoodGuide(false);}
+document.addEventListener('keydown',event=>{if(event.key==='Escape')toggleFoodGuide(false);});
+function generateMedicalReport(){
+ const days=Number($('reportPeriod').value)||30,end=new Date(),start=new Date();start.setDate(start.getDate()-days+1);start.setHours(0,0,0,0);const periodEntries=entries.filter(e=>{const d=parseDate(e.date);return d>=start&&d<=end}),dietEntries=periodEntries.filter(e=>e.source!=='dailySupplements'),suppEntries=periodEntries.filter(e=>e.source==='dailySupplements'),foodDays=[...new Set(dietEntries.map(e=>e.date))],allDays=[...new Set(periodEntries.map(e=>e.date))],suppDays=[...new Set(suppEntries.map(e=>e.date))];
+ const dietaryCa=sum(dietEntries,'calcium'),supplementCa=sum(suppEntries,'calcium'),vitaminD=sum(periodEntries,'vitaminD'),calories=sum(periodEntries,'calories'),dailyTotals={};periodEntries.forEach(e=>dailyTotals[e.date]=(dailyTotals[e.date]||0)+Number(e.calcium||0));const goalDays=Object.values(dailyTotals).filter(v=>v>=goal).length,name=$('reportPatientName').value.trim();
+ medicalReportText='RESUMEN MYCALCIUM\n'+(name?'Paciente: '+name+'\n':'')+'Periodo: últimos '+days+' días\nGenerado: '+new Date().toLocaleDateString('es-MX')+'\n\nREGISTRO\nDías con algún registro: '+allDays.length+' de '+days+'\nDías con alimentos registrados: '+foodDays.length+'\nDías con suplementos confirmados: '+suppDays.length+'\n\nPROMEDIOS EN DÍAS REGISTRADOS\nCalcio dietético: '+fmt(foodDays.length?dietaryCa/foodDays.length:0)+' mg/día\nCalcio de suplementos: '+fmt(suppDays.length?supplementCa/suppDays.length:0)+' mg/día confirmado\nCalcio total: '+fmt(allDays.length?(dietaryCa+supplementCa)/allDays.length:0)+' mg/día\nVitamina D registrada: '+fmt(suppDays.length?vitaminD/suppDays.length:0)+' UI/día confirmado\nCalorías registradas: '+fmt(foodDays.length?calories/foodDays.length:0)+' kcal/día\n\nMETA DE CALCIO\nMeta actual: '+fmt(goal)+' mg/día\nDías registrados que alcanzaron la meta: '+goalDays+' de '+allDays.length+'\n\nSuplementos habituales declarados:\nCalcio: '+(supplements.calciumName||'No especificado')+' · '+fmt(supplements.calciumDose||0)+' mg de calcio elemental\nVitamina D: '+(supplements.vitaminDName||'No especificada')+' · '+fmt(supplements.vitaminDDose||0)+' UI\n\nEste resumen proviene de registros del paciente y estimaciones nutricionales. No sustituye valoración médica ni nutricional.';
+ $('reportPreview').textContent=medicalReportText;$('reportPreview').style.display='block';$('reportActions').style.display='grid';showToast('Resumen generado. Revísalo antes de compartir.');
+}
+async function copyMedicalReport(){if(!medicalReportText)generateMedicalReport();try{await navigator.clipboard.writeText(medicalReportText);showToast('Resumen copiado.');}catch(e){showToast('No fue posible copiar automáticamente.');}}
+function downloadMedicalReport(){if(!medicalReportText)generateMedicalReport();const blob=new Blob([medicalReportText],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='resumen-mycalcium-'+iso(new Date())+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+async function shareMedicalReport(){if(!medicalReportText)generateMedicalReport();if(navigator.share){try{await navigator.share({title:'Resumen MyCalcium',text:medicalReportText});}catch(e){if(e.name!=='AbortError')showToast('No fue posible abrir el menú de compartir.');}}else{await copyMedicalReport();showToast('Resumen copiado; puedes pegarlo en el medio que elijas.');}}
 function saveSupplements(){
  supplements={calciumName:$('calciumSupplementName').value.trim(),calciumDose:Math.max(0,Number($('calciumSupplementDose').value)||0),vitaminDName:$('vitaminDName').value.trim(),vitaminDDose:Math.max(0,Number($('vitaminDDose').value)||0)};
  localStorage.setItem(SUPPLEMENTKEY,JSON.stringify(supplements));renderSupplementSettings();showToast('Dosis habituales guardadas.');
@@ -727,24 +778,25 @@ function renderToday(){
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function startOfWeek(d){let x=new Date(d);const day=(x.getDay()+6)%7;x.setDate(x.getDate()-day);x.setHours(0,0,0,0);return x}
 function daysBetween(a,b){return Math.round((b-a)/86400000)}
-function metricConfig(){return metric==='calories'?{key:'calories',unit:'kcal',label:'Calorías',top:'#fb923c',bottom:'#fdba74'}:metric==='vitaminD'?{key:'vitaminD',unit:'UI',label:'Vitamina D',top:'#eab308',bottom:'#fde68a'}:{key:'calcium',unit:'mg',label:'Calcio',top:'#86f000',bottom:'#71c79a'};}
+function metricConfig(){return metric==='calories'?{key:'calories',unit:'kcal',label:'Calorías',top:'#fb923c',bottom:'#fdba74'}:metric==='vitaminD'?{key:'vitaminD',unit:'unidades',label:'Vitamina D',top:'#eab308',bottom:'#fde68a'}:{key:'calcium',unit:'mg',label:'Calcio',top:'#86f000',bottom:'#71c79a'};}
+function metricDailyGoal(){return metric==='calories'?calorieGoal:metric==='vitaminD'?vitaminDGoal:goal;}
 function getSeries(){
  const cfg=metricConfig(),key=cfg.key,now=new Date();
- if(range==='day'){const vals=[];for(let i=6;i>=0;i--){let d=new Date(now);d.setDate(d.getDate()-i);let ds=iso(d);vals.push({label:d.toLocaleDateString('es-MX',{weekday:'short'}).replace('.',''),value:sum(entries.filter(e=>e.date===ds),key),goal:metric==='calcium'?goal:0});}return {vals,days:7,avgLabel:'Promedio diario'};}
- if(range==='week'){const vals=[],thisWeek=startOfWeek(now);for(let i=7;i>=0;i--){let s=new Date(thisWeek);s.setDate(s.getDate()-i*7);let e=new Date(s);e.setDate(e.getDate()+6);let filtered=entries.filter(x=>{let d=parseDate(x.date);return d>=s&&d<=e});vals.push({label:'S'+(8-i),value:sum(filtered,key),goal:metric==='calcium'?goal*7:0});}return {vals,days:56,avgLabel:'Promedio diario'};}
- if(range==='month'){const vals=[];for(let i=11;i>=0;i--){let d=new Date(now.getFullYear(),now.getMonth()-i,1),y=d.getFullYear(),m=d.getMonth(),filtered=entries.filter(x=>{let q=parseDate(x.date);return q.getFullYear()===y&&q.getMonth()===m}),dim=new Date(y,m+1,0).getDate();vals.push({label:d.toLocaleDateString('es-MX',{month:'short'}).replace('.',''),value:sum(filtered,key),goal:metric==='calcium'?goal*dim:0});}return {vals,days:365,avgLabel:'Promedio diario'};}
- const vals=[],y=now.getFullYear();for(let i=4;i>=0;i--){let yr=y-i,filtered=entries.filter(x=>parseDate(x.date).getFullYear()===yr),leap=new Date(yr,1,29).getMonth()===1;vals.push({label:String(yr),value:sum(filtered,key),goal:metric==='calcium'?goal*(leap?366:365):0});}return {vals,days:vals.reduce((a,v)=>a+(new Date(Number(v.label),1,29).getMonth()===1?366:365),0),avgLabel:'Promedio diario'};
+ if(range==='day'){const vals=[];for(let i=6;i>=0;i--){let d=new Date(now);d.setDate(d.getDate()-i);let ds=iso(d);vals.push({label:d.toLocaleDateString('es-MX',{weekday:'short'}).replace('.',''),value:sum(entries.filter(e=>e.date===ds),key),goal:metricDailyGoal()});}return {vals,days:7,avgLabel:'Promedio diario'};}
+ if(range==='week'){const vals=[],thisWeek=startOfWeek(now);for(let i=7;i>=0;i--){let s=new Date(thisWeek);s.setDate(s.getDate()-i*7);let e=new Date(s);e.setDate(e.getDate()+6);let filtered=entries.filter(x=>{let d=parseDate(x.date);return d>=s&&d<=e});vals.push({label:'S'+(8-i),value:sum(filtered,key),goal:metricDailyGoal()*7});}return {vals,days:56,avgLabel:'Promedio diario'};}
+ if(range==='month'){const vals=[];for(let i=11;i>=0;i--){let d=new Date(now.getFullYear(),now.getMonth()-i,1),y=d.getFullYear(),m=d.getMonth(),filtered=entries.filter(x=>{let q=parseDate(x.date);return q.getFullYear()===y&&q.getMonth()===m}),dim=new Date(y,m+1,0).getDate();vals.push({label:d.toLocaleDateString('es-MX',{month:'short'}).replace('.',''),value:sum(filtered,key),goal:metricDailyGoal()*dim});}return {vals,days:365,avgLabel:'Promedio diario'};}
+ const vals=[],y=now.getFullYear();for(let i=4;i>=0;i--){let yr=y-i,filtered=entries.filter(x=>parseDate(x.date).getFullYear()===yr),leap=new Date(yr,1,29).getMonth()===1;vals.push({label:String(yr),value:sum(filtered,key),goal:metricDailyGoal()*(leap?366:365)});}return {vals,days:vals.reduce((a,v)=>a+(new Date(Number(v.label),1,29).getMonth()===1?366:365),0),avgLabel:'Promedio diario'};
 }
 function setMetric(value,btn){metric=value;document.querySelectorAll('.metric-tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderChart();}
 function setRange(r,btn){range=r;document.querySelectorAll('.range-tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderChart();}
 function renderChart(){
  const c=$('chart'),rect=c.getBoundingClientRect(),dpr=window.devicePixelRatio||1;c.width=rect.width*dpr;c.height=rect.height*dpr;const ctx=c.getContext('2d');ctx.scale(dpr,dpr);const W=rect.width,H=rect.height,pad={l:44,r:10,t:13,b:30};ctx.clearRect(0,0,W,H);
- const cfg=metricConfig(),series=getSeries(),vals=series.vals,days=series.days,max=Math.max(...vals.map(v=>v.value),...(metric==='calcium'?vals.map(v=>v.goal):[0]),1)*1.08;ctx.font='10px system-ui';ctx.fillStyle='#64748b';ctx.strokeStyle='#e5e7eb';ctx.lineWidth=1;
+ const cfg=metricConfig(),series=getSeries(),vals=series.vals,days=series.days,max=Math.max(...vals.map(v=>v.value),...vals.map(v=>v.goal),1)*1.08;ctx.font='10px system-ui';ctx.fillStyle='#64748b';ctx.strokeStyle='#e5e7eb';ctx.lineWidth=1;
  for(let i=0;i<=4;i++){let y=pad.t+(H-pad.t-pad.b)*i/4;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();let val=max*(1-i/4),label=val>=1000?(val/1000).toFixed(val>=10000?0:1)+'k':Math.round(val);ctx.fillText(label,3,y+3);}
  const plotW=W-pad.l-pad.r,plotH=H-pad.t-pad.b,step=plotW/vals.length,bw=Math.max(6,step*.55);vals.forEach((v,i)=>{let x=pad.l+i*step+(step-bw)/2,bh=(v.value/max)*plotH,y=H-pad.b-bh,grad=ctx.createLinearGradient(0,y,0,H-pad.b);grad.addColorStop(0,cfg.top);grad.addColorStop(1,cfg.bottom);ctx.fillStyle=grad;roundRect(ctx,x,y,bw,bh,5);ctx.fill();ctx.fillStyle='#64748b';ctx.textAlign='center';ctx.fillText(v.label,pad.l+i*step+step/2,H-10);});
- if(metric==='calcium'){const lineGoal=vals[vals.length-1]?.goal||goal,gy=H-pad.b-(lineGoal/max)*plotH;ctx.setLineDash([5,4]);ctx.strokeStyle='#9b9b9b';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(pad.l,gy);ctx.lineTo(W-pad.r,gy);ctx.stroke();ctx.setLineDash([]);}ctx.textAlign='left';
- const total=sum(vals,'value'),dailyAvg=days?total/days:0;$('chartMetricLabel').textContent='Consumo de '+cfg.label;$('statTotal').textContent=fmt(total)+' '+cfg.unit;$('statAverage').textContent=fmt(dailyAvg)+' '+cfg.unit;$('avgLabel').textContent=series.avgLabel;
- if(metric==='calcium'){const expected=goal*days,compliance=expected?Math.round(total/expected*100):0,deficit=Math.max(goal-dailyAvg,0);$('statGoal').textContent=compliance+'%';$('statGoalLabel').textContent='Cumplimiento';$('statDeficit').textContent=fmt(deficit)+' mg';$('statDeficitLabel').textContent='Déficit promedio diario';}else{$('statGoal').textContent=vals.filter(v=>v.value>0).length;$('statGoalLabel').textContent='Periodos con datos';$('statDeficit').textContent='—';$('statDeficitLabel').textContent='Sin meta definida';}
+ const lineGoal=vals[vals.length-1]?.goal||metricDailyGoal(),gy=H-pad.b-(lineGoal/max)*plotH;ctx.setLineDash([5,4]);ctx.strokeStyle='#9b9b9b';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(pad.l,gy);ctx.lineTo(W-pad.r,gy);ctx.stroke();ctx.setLineDash([]);ctx.textAlign='left';
+ const total=sum(vals,'value'),dailyAvg=days?total/days:0;$('chartMetricLabel').textContent='Consumo de '+cfg.label;$('chartUnitLabel').innerHTML='Unidad: <b>'+cfg.unit+'</b> · Valor esperado: <b>'+fmt(metricDailyGoal())+' '+cfg.unit+'/día</b>';$('statTotal').textContent=fmt(total)+' '+cfg.unit;$('statAverage').textContent=fmt(dailyAvg)+' '+cfg.unit;$('avgLabel').textContent=series.avgLabel;
+ const expected=metricDailyGoal()*days,compliance=expected?Math.round(total/expected*100):0,deficit=Math.max(metricDailyGoal()-dailyAvg,0);$('statGoal').textContent=compliance+'%';$('statGoalLabel').textContent='Cumplimiento de referencia';$('statDeficit').textContent=fmt(deficit)+' '+cfg.unit;$('statDeficitLabel').textContent='Diferencia promedio diaria';
 }
 function roundRect(ctx,x,y,w,h,r){if(h<1)return;const rr=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+rr,y);ctx.arcTo(x+w,y,x+w,y+h,rr);ctx.arcTo(x+w,y+h,x,y+h,rr);ctx.arcTo(x,y+h,x,y,rr);ctx.arcTo(x,y,x+w,y,rr);ctx.closePath()}
 function seedDemo(){
@@ -781,6 +833,7 @@ window.addEventListener('resize',()=>renderChart());
 render();
 renderCaptureShortcuts();
 renderSupplementSettings();
+renderAdditionalGoals();
 updatePreferenceButtons();
 checkMealReminder();
 setInterval(checkMealReminder,60000);
